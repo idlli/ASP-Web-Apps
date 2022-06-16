@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="GestionCommercial" Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=.\sqlexpress;Initial Catalog=GestionCommercial;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="GestionCommercialConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Article" Member="Articles">
+    <Type Name="Article">
+      <Column Name="CodeArt" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Desi" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="PU" Type="System.Decimal" DbType="Decimal(6,2)" CanBeNull="true" />
+      <Column Name="QDISP" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Article_Detail" Member="Details" ThisKey="CodeArt" OtherKey="CodeArt" Type="Detail" />
+      <Association Name="Article_LigneLivraison" Member="LigneLivraisons" ThisKey="CodeArt" OtherKey="CodeArt" Type="LigneLivraison" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Livraison" Member="Livraisons">
+    <Type Name="Livraison">
+      <Column Name="NumLiv" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DateLiv" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="Livreur" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="EtatLiv" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="NumCom" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Association Name="Livraison_LigneLivraison" Member="LigneLivraisons" ThisKey="NumLiv" OtherKey="NumLiv" Type="LigneLivraison" />
+      <Association Name="Commande_Livraison" Member="Commande" ThisKey="NumCom" OtherKey="NumCom" Type="Commande" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Client" Member="Clients">
+    <Type Name="Client">
+      <Column Name="CodeCl" Type="System.String" DbType="NVarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Nom" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Ville" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="Client_Commande" Member="Commandes" ThisKey="CodeCl" OtherKey="CodeCl" Type="Commande" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Commande" Member="Commandes">
+    <Type Name="Commande">
+      <Column Name="NumCom" Type="System.String" DbType="NVarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DateCom" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="CodeCl" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+      <Column Name="NE" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Commande_Livraison" Member="Livraisons" ThisKey="NumCom" OtherKey="NumCom" Type="Livraison" />
+      <Association Name="Commande_Detail" Member="Details" ThisKey="NumCom" OtherKey="NumCom" Type="Detail" />
+      <Association Name="Client_Commande" Member="Client" ThisKey="CodeCl" OtherKey="CodeCl" Type="Client" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Detail" Member="Details">
+    <Type Name="Detail">
+      <Column Name="NumCom" Type="System.String" DbType="NVarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CodeArt" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Qte" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Article_Detail" Member="Article" ThisKey="CodeArt" OtherKey="CodeArt" Type="Article" IsForeignKey="true" />
+      <Association Name="Commande_Detail" Member="Commande" ThisKey="NumCom" OtherKey="NumCom" Type="Commande" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LigneLivraison" Member="LigneLivraisons">
+    <Type Name="LigneLivraison">
+      <Column Name="NumLiv" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CodeArt" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="QLiv" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Association Name="Article_LigneLivraison" Member="Article" ThisKey="CodeArt" OtherKey="CodeArt" Type="Article" IsForeignKey="true" />
+      <Association Name="Livraison_LigneLivraison" Member="Livraison" ThisKey="NumLiv" OtherKey="NumLiv" Type="Livraison" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Utilisateur" Member="Utilisateurs">
+    <Type Name="Utilisateur">
+      <Column Name="[Identity]" Member="Identity" Type="System.String" DbType="NVarChar(20) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(40)" CanBeNull="true" />
+      <Column Name="Password" Type="System.String" DbType="NVarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="Role" Type="System.String" DbType="NVarChar(20)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BonCommande" Member="BonCommandes">
+    <Type Name="BonCommande">
+      <Column Name="NumCom" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="DateCom" Type="System.DateTime" DbType="DateTime" CanBeNull="false" />
+      <Column Name="CodeCl" Type="System.String" DbType="NVarChar(20)" CanBeNull="false" />
+      <Column Name="NE" Type="System.Boolean" DbType="Bit" CanBeNull="false" />
+      <Column Name="CodeArt" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Desi" Type="System.String" DbType="NVarChar(50)" CanBeNull="false" />
+      <Column Name="PU" Type="System.Decimal" DbType="Decimal(6,2)" CanBeNull="false" />
+      <Column Name="Qte" Type="System.Int32" DbType="Int" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Factures" Member="Factures">
+    <Type Name="Facture">
+      <Column Name="NumCom" Type="System.String" DbType="NVarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="DateCom" Type="System.DateTime" DbType="DateTime" CanBeNull="false" />
+      <Column Name="CodeCl" Type="System.String" DbType="NVarChar(20)" CanBeNull="false" />
+      <Column Name="CodeArt" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Desi" Type="System.String" DbType="NVarChar(50)" CanBeNull="false" />
+      <Column Name="PU" Type="System.Decimal" DbType="Decimal(6,2)" CanBeNull="false" />
+      <Column Name="Qte" Type="System.Int32" DbType="Int" CanBeNull="false" />
+      <Column Name="puQte" Type="System.Decimal" DbType="Decimal(17,2)" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.BonLivraison" Member="BonLivraisons">
+    <Type Name="BonLivraison">
+      <Column Name="CodeArt" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Desi" Type="System.String" DbType="NVarChar(50)" CanBeNull="false" />
+      <Column Name="PU" Type="System.Decimal" DbType="Decimal(6,2)" CanBeNull="false" />
+      <Column Name="NumLiv" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DateLiv" Type="System.DateTime" DbType="Date" CanBeNull="false" />
+      <Column Name="Livreur" Type="System.String" DbType="NVarChar(20)" CanBeNull="false" />
+      <Column Name="EtatLiv" Type="System.Boolean" DbType="Bit" CanBeNull="false" />
+      <Column Name="NumCom" Type="System.String" DbType="NVarChar(20)" CanBeNull="false" />
+      <Column Name="QLiv" Type="System.Int32" DbType="Int" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>
